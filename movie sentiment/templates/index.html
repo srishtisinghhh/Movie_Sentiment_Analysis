@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Sentiment Analyzer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: #d3d3d3;
+            font-family: 'Arial', sans-serif;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        h1, h2, h3 {
+            color: #ba68c8;
+        }
+
+        .card {
+            background-color: #2e2e2e;
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-control {
+            background-color: #3a3a3a;
+            border: none;
+            color: #d3d3d3;
+        }
+
+        .form-control:focus {
+            background-color: #3a3a3a;
+            border: none;
+            color: #d3d3d3;
+            box-shadow: 0 0 5px #ba68c8;
+        }
+
+        .btn-primary {
+            background-color: #ba68c8;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #9c27b0;
+            box-shadow: 0 0 10px #ba68c8;
+        }
+
+        .btn-info {
+            background-color: #673ab7;
+            border: none;
+        }
+
+        .btn-info:hover {
+            background-color: #5e35b1;
+            box-shadow: 0 0 10px #673ab7;
+        }
+
+        .wordcloud {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ba68c8;
+            border-radius: 5px;
+        }
+
+        .modal-content {
+            background-color: #2e2e2e;
+            color: #d3d3d3;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #ba68c8;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #ba68c8;
+        }
+
+        .modal-body img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 text-center">Movie Sentiment Analyzer</h1>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <form action="/predict" method="post">
+                            <div class="form-group">
+                                <label for="review">Enter your movie review:</label>
+                                <textarea id="review" name="review" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Analyze Sentiment</button>
+                        </form>
+                        {% if review %}
+                        <div class="result mt-4">
+                            <h2>Review:</h2>
+                            <p>{{ review }}</p>
+                            <h2>Sentiment:</h2>
+                            <p>{{ sentiment }}</p>
+                        </div>
+                        {% endif %}
+                        <button class="btn btn-info btn-block mt-4" data-toggle="modal" data-target="#modelInfoModal">Model Info</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row result mt-5">
+            <div class="col-md-6">
+                <h3 class="text-center">Positive Review Word Cloud</h3>
+                <img src="{{ url_for('static', filename='positive_wordcloud.png') }}" class="wordcloud mx-auto d-block" alt="Positive Word Cloud">
+            </div>
+            <div class="col-md-6">
+                <h3 class="text-center">Negative Review Word Cloud</h3>
+                <img src="{{ url_for('static', filename='negative_wordcloud.png') }}" class="wordcloud mx-auto d-block" alt="Negative Word Cloud">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Model Info -->
+    <div class="modal fade" id="modelInfoModal" tabindex="-1" aria-labelledby="modelInfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelInfoModalLabel">Model Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Model Accuracy: {{ accuracy }}</h5>
+                    <h5>Confusion Matrix:</h5>
+                    <img src="{{ url_for('static', filename='confusion_matrix.png') }}" alt="Confusion Matrix">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+
